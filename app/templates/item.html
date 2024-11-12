@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ item.name }} - E-Makeup 
+{% endblock %}
+
+{% block content %}
+    {% with msgs = get_flashed_messages(with_categories=True) %}
+        {% for c, msg in msgs %}
+            {% if c == 'error' %}
+                <div class="flash-error">
+            {% else %}
+                <div class="flash-success">
+            {% endif %}
+                {{ msg | safe }}
+            </div><br>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="item-display card shadow-lg p-4 mb-5 rounded" style="max-width: 800px; margin: 0 auto;">
+        <div class="img-wrapper" style="text-align: center;">
+            <img src="{{ url_for('static', filename='images/' + item.image) }}" class="pic card-img-top" alt="Product Image" style="width: 100%; height: auto; border-radius: 10px; max-width: 150px;">
+
+        </div>
+        <div class="card-body">
+            <h3 class="item-name" style="font-size: 2rem; font-weight: bold;">{{ item.name }}</h3>
+            <div class="price">
+                <span class="price-text" style="font-size: 1.5rem; font-weight: bold;">${{ item.price }}</span>
+            </div>
+
+            <!-- Ratings -->
+            <div class="ratings">
+                <i class="fa fa-star checked"></i>
+                <i class="fa fa-star checked"></i>
+                <i class="fa fa-star checked"></i>
+                <i class="fa fa-star checked"></i>
+                <i class="fa fa-star checked"></i>
+                <span class="text-muted">({{ range(1, 51) | random }})</span>
+            </div>
+
+            <!-- Product Details -->
+            <p class="product-details" style="font-size: 1.1rem; line-height: 1.5;">{{ item.details | safe }}</p>
+
+            <!-- Add to Cart Form -->
+            <form action="{{ url_for('add_to_cart', id=item.id) }}" method="POST" class="add-to-cart-form">
+                <label for="quantity" class="font-weight-bold" style="font-size: 1.2rem;">Quantity:</label>
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="50" onkeyup="if(this.value > 50) this.value=50;" required class="quantity-input" style="font-size: 1rem; padding: 5px;">
+                <br><br>
+                <input type="submit" value="Add to Cart" name="add" class="btn btn-primary add-to-cart-btn" style="font-size: 1.2rem; padding: 10px 20px;">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
