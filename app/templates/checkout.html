@@ -1,15 +1,12 @@
 {% extends "base.html" %}
-
 {% block title %}
 	Checkout
 {% endblock %}
-
-
 {% block content %}
 <div class="container mt-5">
     <h2 class="mb-4">Checkout</h2>
     
-    <form method="POST" >
+    <form method="POST">
         <!-- Shipping Details -->
         <h4>Shipping Information</h4>
         <div class="form-group">
@@ -35,15 +32,8 @@
             </div>
         </div>
 
-        <!-- Confirm Payment -->
-        <h4 class="mt-4">Confirm Payment</h4>
-        <div class="form-group">
-            <label for="confirmationCode">We sent you a code on WhatsApp. Please enter it to confirm your order:</label>
-            {{ form.confirm_code(class="form-control", placeholder="Enter confirmation code") }}
-        </div>
-
-        <!-- Submit Button -->
-        {{ form.submit(class="btn btn-primary mt-4")}}
+        <!-- Next Button (redirects after clicking) -->
+        <a href="{{ url_for('confirm_email') }}" class="btn btn-primary mt-4">Next</a> 
     </form>
 </div>
 {% endblock %}

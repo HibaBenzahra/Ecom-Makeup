@@ -1,12 +1,28 @@
 {% extends "base.html" %}
 
 {% block title %}
-	Payment Failure - Flask-O-shop
+    Payment Failure - Flask-O-shop
 {% endblock %}
 
 {% block content %}
-    <div class="flash-error">
-        Payment couldn't be completed. Please try again.
-        <a href="{{ url_for('cart') }}">Go back!</a>
+    <div class="payment-failure-container text-center my-5">
+        <!-- Alert Message -->
+        <div class="alert alert-danger py-4">
+            <h2 class="mb-3"><i class="fa fa-times-circle" aria-hidden="true"></i> Payment Failed</h2>
+            <p class="mb-4">Unfortunately, your payment could not be completed as the session has expired.</p>
+            <p>Please check your payment details or verify your email and try again.</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons mt-4">
+            <p class="mb-2">Need to verify your email? Resend the verification link:</p>
+            <a href="{{ url_for('confirm_email') }}" class="btn btn-primary btn-lg mb-3">
+                <i class="fa fa-envelope"></i> Resend Verification Link
+            </a>
+            <p class="mb-2">Want to review your cart and try again? Click below:</p>
+            <a href="{{ url_for('cart') }}" class="btn btn-secondary btn-lg">
+                <i class="fa fa-shopping-cart"></i> Back to Cart
+            </a>
+        </div>
     </div>
 {% endblock %}

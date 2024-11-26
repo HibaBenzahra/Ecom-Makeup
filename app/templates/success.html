@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block title %}
-	Payment Success - Flask-O-shop
+    Payment Success
 {% endblock %}
 
 {% block content %}
-    <div class="success">
-        Payment successful!!<br>
-        Order placed successfully.
-        <a href="{{ url_for('orders') }}">View order</a>
+    <div class="alert alert-success text-center mt-5">
+        <h2 class="mb-3">🎉 Payment Successful! 🎉</h2>
+        <p class="mb-4">Thank you for your order! Your payment has been processed, and your order has been placed successfully.</p>
+        <a href="{{ url_for('orders') }}" class="btn btn-primary btn-lg">View Your Order</a>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary btn-lg ml-3">Back to Shop</a>
     </div>
 {% endblock %}

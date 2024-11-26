@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Email Verification - Checkout
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Email Verification</h2>
+    
+    <div class="alert alert-info" role="alert">
+        <p>We have sent a verification link to your email: {{ email }}. Please check your inbox and click the link to confirm your order.</p>
+        <p>If you didn't receive the email, please check your spam folder or <a href="{{url_for('confirm_email')}}">click here</a> to resend the verification link.</p>
+    </div>
+
+    <div class="text-center">
+        <a href="{{url_for('home')}}" class="btn btn-primary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

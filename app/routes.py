@@ -1,19 +1,12 @@
-from app import app, login_manager, db
-#import os, requests, json
+from app import app, login_manager, db, mail, s
 from datetime import datetime
 from flask import render_template, redirect, url_for, flash, request
 from .forms import LoginForm, RegisterForm, CheckoutForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, current_user, login_required, logout_user
 from .db_models import db, User, Item
-#from itsdangerous import URLSafeTimedSerializer
-#import random
-#import pywhatkit
-#import subprocess
-#from app.wtsp import confirmation_code
-#from dotenv import load_dotenv
-
-
+from itsdangerous import SignatureExpired, BadSignature
+from flask_mail import Message
 
 
 @app.context_processor
@@ -134,28 +127,39 @@ def search():
 	return render_template('home.html', items=items, search=True, query=query)
 
 
+@app.route('/create-checkout-session', methods=['GET', 'POST'])
+def create_checkout_session():
+    form = CheckoutForm()
+    return render_template('checkout.html', form=form)
+
+#Email verification 
+@app.route('/confirm_email')
+def confirm_email():
+
+	email = current_user.email
+	token = s.dumps(email, salt='email-confirm')
+
+	msg = Message('Confirm Email', sender='benzahra.hiba@gmail.com', recipients=[email])
+	link = url_for('checkout_success', token=token,  _external=True)
+	msg.body = 'Click on this link to confirm your Order {}'.format(link)
+	mail.send(msg)
+
+	return render_template('email_confirm.html', email='email', token=token)
+
 # Route for successful checkout page
-@app.route('/checkout_success')
-def checkout_success():
-    return render_template('success.html')
+@app.route('/checkout_success/<token>')
+def checkout_success(token):
+	try:
+		email = s.loads(token, salt='email-confirm', max_age=3600)
+		return render_template('success.html')
+	except SignatureExpired:
+		return redirect(url_for('checkout_failure'))
+	
+	except BadSignature:
+		return redirect(url_for('checkout_failure'))
+
 
 # Route for failed checkout page
 @app.route('/checkout_failure')
 def checkout_failure():
     return render_template('failure.html')
-
-#whatsapp
-@app.route('/create-checkout-session', methods=['GET', 'POST'])
-def create_checkout_session():
-    form = CheckoutForm()
-    
-    
-
-     #   subprocess.run(['python', 'other_script.py'])
-
-    if form.validate_on_submit(): #and form.confirm_code.data == confirmation_code
-        return redirect(url_for('checkout_success'))
-    else:
-        flash("Couldn't Checkout", category='danger')
-
-    return render_template('checkout.html', form=form)
